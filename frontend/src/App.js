@@ -749,6 +749,10 @@ const MainContent = () => {
     
     try {
       const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      console.log('Backend URL:', backendUrl);
+      console.log('Sending message:', messageToSend);
+      console.log('User info:', userInfo);
+      
       const response = await fetch(`${backendUrl}/api/chat`, {
         method: 'POST',
         headers: {
