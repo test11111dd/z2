@@ -78,9 +78,19 @@ async def chat_with_ai(chat_data: ChatMessage):
         }
         await db.chat_messages.insert_one(user_message)
         
-        # Intelligent AI response system based on message content
-        message_lower = chat_data.message.lower()
-        user_name = chat_data.user_info.name
+        # Handle empty or whitespace-only messages
+        if not chat_data.message or not chat_data.message.strip():
+            ai_response = f"Hi {chat_data.user_info.name}! I'm here to help you reduce your crypto insurance premiums. Please ask me any questions about crypto security, insurance options, or premium reduction strategies!"
+            recommendations = [
+                "Hardware wallet usage = 40% premium reduction",
+                "Two-factor authentication = 15% reduction",
+                "Regular security audits = 10% reduction",
+                "Proper backup procedures = 20% reduction"
+            ]
+        else:
+            # Intelligent AI response system based on message content
+            message_lower = chat_data.message.lower()
+            user_name = chat_data.user_info.name
         
         # Security-related keywords and responses
         if any(keyword in message_lower for keyword in ['hardware wallet', 'cold storage', 'ledger', 'trezor']):
