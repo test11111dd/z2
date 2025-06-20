@@ -778,10 +778,12 @@ const MainContent = () => {
       }]);
       
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Detailed error:', error);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
       setChatMessages(prev => [...prev, {
         type: 'bot',
-        message: `Sorry ${userInfo.name}, I encountered an error. Please try again or contact our support team.`,
+        message: `Sorry ${userInfo.name}, I encountered an error: ${error.message}. Please try again or contact our support team.`,
         timestamp: new Date()
       }]);
     }
