@@ -78,9 +78,12 @@ async def chat_with_ai(chat_data: ChatMessage):
         }
         await db.chat_messages.insert_one(user_message)
         
+        # Initialize variables
+        user_name = chat_data.user_info.name
+        
         # Handle empty or whitespace-only messages
         if not chat_data.message or not chat_data.message.strip():
-            ai_response = f"Hi {chat_data.user_info.name}! I'm here to help you reduce your crypto insurance premiums. Please ask me any questions about crypto security, insurance options, or premium reduction strategies!"
+            ai_response = f"Hi {user_name}! I'm here to help you reduce your crypto insurance premiums. Please ask me any questions about crypto security, insurance options, or premium reduction strategies!"
             recommendations = [
                 "Hardware wallet usage = 40% premium reduction",
                 "Two-factor authentication = 15% reduction",
@@ -90,90 +93,89 @@ async def chat_with_ai(chat_data: ChatMessage):
         else:
             # Intelligent AI response system based on message content
             message_lower = chat_data.message.lower()
-            user_name = chat_data.user_info.name
-        
-        # Security-related keywords and responses
-        if any(keyword in message_lower for keyword in ['hardware wallet', 'cold storage', 'ledger', 'trezor']):
-            ai_response = f"Excellent question, {user_name}! Hardware wallets are the gold standard for crypto security. Using a hardware wallet like Ledger or Trezor can reduce your insurance premiums by up to 40%. These devices keep your private keys offline, making them nearly impossible to hack remotely."
-            recommendations = [
-                "Hardware wallet usage = 40% premium reduction",
-                "Consider Ledger Nano X or Trezor Model T",
-                "Store seed phrase securely (separate location)",
-                "Enable PIN protection on device"
-            ]
-        
-        elif any(keyword in message_lower for keyword in ['2fa', 'two factor', 'authentication', 'google authenticator']):
-            ai_response = f"Great thinking, {user_name}! Two-factor authentication is crucial. Using 2FA on all your crypto accounts can reduce premiums by 15%. Avoid SMS-based 2FA - use app-based authenticators like Google Authenticator or hardware keys like YubiKey."
-            recommendations = [
-                "App-based 2FA = 15% premium reduction",
-                "Use Google Authenticator or Authy",
-                "Avoid SMS-based 2FA (vulnerable to SIM swaps)",
-                "Consider hardware keys for maximum security"
-            ]
-        
-        elif any(keyword in message_lower for keyword in ['exchange', 'binance', 'coinbase', 'kraken', 'centralized']):
-            ai_response = f"Important consideration, {user_name}! Keeping crypto on exchanges increases risk and premiums. Moving funds to self-custody (hardware wallet) can reduce your premium by 30-50%. Only keep trading amounts on exchanges."
-            recommendations = [
-                "Self-custody reduces premiums by 30-50%",
-                "Only keep trading amounts on exchanges",
-                "Use reputable exchanges with insurance coverage",
-                "Enable all available security features"
-            ]
-        
-        elif any(keyword in message_lower for keyword in ['defi', 'smart contract', 'protocol', 'yield farming', 'liquidity']):
-            ai_response = f"Smart question, {user_name}! DeFi carries higher risks but there are ways to reduce premiums: Use only audited protocols, start with established platforms like Uniswap/Aave, and consider DeFi insurance add-ons."
-            recommendations = [
-                "Use only audited protocols = 20% reduction",
-                "Stick to established platforms (Uniswap, Aave)",
-                "Consider DeFi-specific insurance coverage",
-                "Monitor protocol health regularly"
-            ]
-        
-        elif any(keyword in message_lower for keyword in ['scam', 'phishing', 'fake', 'suspicious']):
-            ai_response = f"Crucial awareness, {user_name}! Scam protection education can reduce premiums by 10%. Always verify URLs, never click suspicious links, and use bookmarks for important sites. Our AI monitors for new scam patterns 24/7."
-            recommendations = [
-                "Scam awareness training = 10% reduction",
-                "Always verify website URLs",
-                "Use bookmarks for important sites",
-                "Report suspicious activities immediately"
-            ]
-        
-        elif any(keyword in message_lower for keyword in ['premium', 'cost', 'price', 'reduce', 'lower', 'cheaper']):
-            ai_response = f"Perfect question, {user_name}! Here's how to maximize your premium reductions: Combine hardware wallet (40% off) + 2FA (15% off) + security audit (10% off) = up to 65% total savings. The more security measures, the lower your premium!"
-            recommendations = [
-                "Hardware wallet = 40% reduction",
-                "2FA on all accounts = 15% reduction", 
-                "Regular security audits = 10% reduction",
-                "Combine all measures for maximum savings"
-            ]
-        
-        elif any(keyword in message_lower for keyword in ['backup', 'seed phrase', 'recovery', 'lost keys']):
-            ai_response = f"Critical topic, {user_name}! Proper backup procedures can reduce premiums by 20%. Store your seed phrase on metal backup plates, use multiple secure locations, and never store digitally. Lost key coverage requires verified backup procedures."
-            recommendations = [
-                "Metal backup plates = 20% reduction",
-                "Multiple secure storage locations",
-                "Never store seed phrases digitally",
-                "Document your backup procedures"
-            ]
-        
-        elif any(keyword in message_lower for keyword in ['multisig', 'multi-signature', 'multiple keys']):
-            ai_response = f"Advanced security, {user_name}! Multi-signature wallets offer the highest protection and can reduce premiums by up to 50%. Requires 2+ signatures for transactions. Great for high-value holdings."
-            recommendations = [
-                "Multi-signature setup = 50% reduction",
-                "Requires 2-3 signature approvals",
-                "Ideal for holdings above €50,000",
-                "Consider Gnosis Safe or Casa solutions"
-            ]
-        
-        else:
-            # General response for other questions
-            ai_response = f"Hi {user_name}! I'm here to help you reduce your crypto insurance premiums. Based on your question about '{chat_data.message}', I can provide personalized advice. The key is implementing multiple security layers - each one reduces your premium!"
-            recommendations = [
-                "Hardware wallet usage = 40% premium reduction",
-                "Two-factor authentication = 15% reduction",
-                "Regular security audits = 10% reduction",
-                "Proper backup procedures = 20% reduction"
-            ]
+            
+            # Security-related keywords and responses
+            if any(keyword in message_lower for keyword in ['hardware wallet', 'cold storage', 'ledger', 'trezor']):
+                ai_response = f"Excellent question, {user_name}! Hardware wallets are the gold standard for crypto security. Using a hardware wallet like Ledger or Trezor can reduce your insurance premiums by up to 40%. These devices keep your private keys offline, making them nearly impossible to hack remotely."
+                recommendations = [
+                    "Hardware wallet usage = 40% premium reduction",
+                    "Consider Ledger Nano X or Trezor Model T",
+                    "Store seed phrase securely (separate location)",
+                    "Enable PIN protection on device"
+                ]
+            
+            elif any(keyword in message_lower for keyword in ['2fa', 'two factor', 'authentication', 'google authenticator']):
+                ai_response = f"Great thinking, {user_name}! Two-factor authentication is crucial. Using 2FA on all your crypto accounts can reduce premiums by 15%. Avoid SMS-based 2FA - use app-based authenticators like Google Authenticator or hardware keys like YubiKey."
+                recommendations = [
+                    "App-based 2FA = 15% premium reduction",
+                    "Use Google Authenticator or Authy",
+                    "Avoid SMS-based 2FA (vulnerable to SIM swaps)",
+                    "Consider hardware keys for maximum security"
+                ]
+            
+            elif any(keyword in message_lower for keyword in ['exchange', 'binance', 'coinbase', 'kraken', 'centralized']):
+                ai_response = f"Important consideration, {user_name}! Keeping crypto on exchanges increases risk and premiums. Moving funds to self-custody (hardware wallet) can reduce your premium by 30-50%. Only keep trading amounts on exchanges."
+                recommendations = [
+                    "Self-custody reduces premiums by 30-50%",
+                    "Only keep trading amounts on exchanges",
+                    "Use reputable exchanges with insurance coverage",
+                    "Enable all available security features"
+                ]
+            
+            elif any(keyword in message_lower for keyword in ['defi', 'smart contract', 'protocol', 'yield farming', 'liquidity']):
+                ai_response = f"Smart question, {user_name}! DeFi carries higher risks but there are ways to reduce premiums: Use only audited protocols, start with established platforms like Uniswap/Aave, and consider DeFi insurance add-ons."
+                recommendations = [
+                    "Use only audited protocols = 20% reduction",
+                    "Stick to established platforms (Uniswap, Aave)",
+                    "Consider DeFi-specific insurance coverage",
+                    "Monitor protocol health regularly"
+                ]
+            
+            elif any(keyword in message_lower for keyword in ['scam', 'phishing', 'fake', 'suspicious']):
+                ai_response = f"Crucial awareness, {user_name}! Scam protection education can reduce premiums by 10%. Always verify URLs, never click suspicious links, and use bookmarks for important sites. Our AI monitors for new scam patterns 24/7."
+                recommendations = [
+                    "Scam awareness training = 10% reduction",
+                    "Always verify website URLs",
+                    "Use bookmarks for important sites",
+                    "Report suspicious activities immediately"
+                ]
+            
+            elif any(keyword in message_lower for keyword in ['premium', 'cost', 'price', 'reduce', 'lower', 'cheaper']):
+                ai_response = f"Perfect question, {user_name}! Here's how to maximize your premium reductions: Combine hardware wallet (40% off) + 2FA (15% off) + security audit (10% off) = up to 65% total savings. The more security measures, the lower your premium!"
+                recommendations = [
+                    "Hardware wallet = 40% reduction",
+                    "2FA on all accounts = 15% reduction", 
+                    "Regular security audits = 10% reduction",
+                    "Combine all measures for maximum savings"
+                ]
+            
+            elif any(keyword in message_lower for keyword in ['backup', 'seed phrase', 'recovery', 'lost keys']):
+                ai_response = f"Critical topic, {user_name}! Proper backup procedures can reduce premiums by 20%. Store your seed phrase on metal backup plates, use multiple secure locations, and never store digitally. Lost key coverage requires verified backup procedures."
+                recommendations = [
+                    "Metal backup plates = 20% reduction",
+                    "Multiple secure storage locations",
+                    "Never store seed phrases digitally",
+                    "Document your backup procedures"
+                ]
+            
+            elif any(keyword in message_lower for keyword in ['multisig', 'multi-signature', 'multiple keys']):
+                ai_response = f"Advanced security, {user_name}! Multi-signature wallets offer the highest protection and can reduce premiums by up to 50%. Requires 2+ signatures for transactions. Great for high-value holdings."
+                recommendations = [
+                    "Multi-signature setup = 50% reduction",
+                    "Requires 2-3 signature approvals",
+                    "Ideal for holdings above €50,000",
+                    "Consider Gnosis Safe or Casa solutions"
+                ]
+            
+            else:
+                # General response for other questions
+                ai_response = f"Hi {user_name}! I'm here to help you reduce your crypto insurance premiums. Based on your question about '{chat_data.message}', I can provide personalized advice. The key is implementing multiple security layers - each one reduces your premium!"
+                recommendations = [
+                    "Hardware wallet usage = 40% premium reduction",
+                    "Two-factor authentication = 15% reduction",
+                    "Regular security audits = 10% reduction",
+                    "Proper backup procedures = 20% reduction"
+                ]
         
         # Save AI response to database
         ai_message = {
