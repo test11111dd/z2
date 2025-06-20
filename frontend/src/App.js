@@ -734,9 +734,12 @@ const MainContent = () => {
   const sendMessage = async () => {
     if (!currentMessage.trim()) return;
     
+    // Store the message before clearing it
+    const messageToSend = currentMessage.trim();
+    
     const userMessage = {
       type: 'user',
-      message: currentMessage,
+      message: messageToSend,
       timestamp: new Date()
     };
     
@@ -752,7 +755,7 @@ const MainContent = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: currentMessage,
+          message: messageToSend,
           user_info: userInfo
         })
       });
